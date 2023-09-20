@@ -38,6 +38,9 @@ const ComprasSchema = Schema({
         required: true,
         default:true
     },
+    percepcion: {
+        type: Number
+    },
     detalle_comp:{
             type: Array,
             items:[Schema.Types.Array],
