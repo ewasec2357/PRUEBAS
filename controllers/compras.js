@@ -8,7 +8,6 @@ const getCompras = async(req, res) => {
 
     const [ compras, total ] = await Promise.all([Compras.find({estado:true}, 
                 'numero_comp ruc_comp tipo_doc_comp prove_comp fecha_comp subtot_comp igv_comp tot_comp detalle_comp percepcion')
-                .populate({path:'detalle_comp.nom_prod',select:'_id', model:'Productos' })
                 .skip( desde ),
        Compras.countDocuments()
     ]);
@@ -24,7 +23,7 @@ const getCompras = async(req, res) => {
 
 const getCompraIdProducto = async(req, res) =>{
     
-    const idProd  = req.params.id;
+    const nomProd  = req.params.id;
 
     try {
 
@@ -40,7 +39,7 @@ const getCompraIdProducto = async(req, res) =>{
         let fechasCompras = [];
         comprasById.forEach((element) => {
             element.detalle_comp.forEach((element2) => {
-                if( element2.nom_prod === idProd){
+                if( element2.nom_prod === nomProd){
                     if (comprasByProdName.length <= 3) {
                         comprasByProdName.push(element2);
                         fechasCompras.push(element.fecha_comp);
