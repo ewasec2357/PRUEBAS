@@ -93,22 +93,23 @@ const borrarCategoria = async (req, res = response) => {
 
     try {
         
-        const categorias = await Categorias.findById( id );
+        const categoriaUpdate = await Categorias.findById( id );
 
-        if ( !categorias ) {
+        if ( !categoriaUpdate ) {
             return res.status(404).json({
                 ok: true,
                 msg: 'La categoria no fue encontrada por id',
             });
         }
 
-        await Categorias.findByIdAndDelete( id );
+        categoriaUpdate.estado = false;
+        await Categorias.findByIdAndUpdate( id, categoriaUpdate );
 
         res.json({
             ok: true,
-            msg: 'Categoria borrada'
-        }); 
-
+            msg: 'Categoria de baja'
+        });
+        
     } catch (error) {
 
         console.log(error);

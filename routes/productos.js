@@ -5,12 +5,13 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 
-const { getProductos, crearProducto, actualizarProducto, borrarProducto } = require('../controllers/productos');
+const { getProductoById, getProductos, crearProducto, actualizarProducto, borrarProducto } = require('../controllers/productos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
 
 const router = Router();
 
+router.get( '/:id', validarJWT , getProductoById );
 
 router.get( '/', validarJWT , getProductos );
 

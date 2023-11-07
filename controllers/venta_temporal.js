@@ -1,6 +1,27 @@
 const { response } = require('express');
 const Venta_Temporal = require('../models/venta_temporal');
 
+const getVenta_TemporalById = async(req, res = response) => {
+
+    const id  = req.params.id;
+    
+  
+        const VentaTemporalById = await Venta_Temporal.findById( id ).populate({path:'vt_id_prod',select:'nom_prod', model:'Productos' });
+
+        if ( !VentaTemporalById ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Venta no encontrado por id',
+            });
+        }
+
+    res.json({
+        ok: true,
+        VentaTemporalById
+    });
+
+}
+
 const getVenta_Temporal = async(req, res = response) => {
 
     const [ venta_temporal, total ] = await Promise.all([Venta_Temporal.find({estado:true},
@@ -109,6 +130,7 @@ const borrarVenta_Temporal = async (req, res = response) => {
 
 
 module.exports = {
+    getVenta_TemporalById,
     getVenta_Temporal,
     crearVenta_Temporal,
     actualizarVenta_Temporal,

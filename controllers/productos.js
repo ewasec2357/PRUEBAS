@@ -1,6 +1,29 @@
 const { response } = require('express');
 const Productos = require('../models/productos');
 
+const getProductoById = async(req, res = response) => {
+
+    const id  = req.params.id;
+    
+  
+        const ProductoById = await Productos.findById( id ).populate({path:'id_cat',select:'nom_cat', model:'Categorias' });
+
+        if ( !ProductoById ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Producto no encontrado por id',
+            });
+        }
+
+
+
+    res.json({
+        ok: true,
+        ProductoById
+    });
+
+}
+
 const getProductos = async(req, res = response) => {
 
 
@@ -89,20 +112,21 @@ const borrarProducto = async (req, res = response) => {
 
     try {
         
-        const productos = await Productos.findById( id );
+        const productoUpdate = await Productos.findById( id );
 
-        if ( !productos ) {
+        if ( !productoUpdate ) {
             return res.status(404).json({
                 ok: true,
                 msg: 'El producto no fue encontrado por id',
             });
         }
 
-        await Productos.findByIdAndDelete( id );
+        productoUpdate.estado = false;
+        await Productos.findByIdAndUpdate( id, productoUpdate)
 
         res.json({
             ok: true,
-            msg: 'Producto borrado'
+            msg: 'Producto de baja'
         }); 
 
     } catch (error) {
@@ -111,13 +135,15 @@ const borrarProducto = async (req, res = response) => {
 
         res.status(500).json({
             ok: false,
-            msg: 'Hable con el administrador'
+            msg: 'Hable con el administrador',
+            error: error
         })
     }
 }
 
 
 module.exports = {
+    getProductoById,
     getProductos,
     crearProducto,
     actualizarProducto,

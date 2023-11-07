@@ -1,9 +1,28 @@
 const { response } = require('express');
-const moment = require('moment');
-
 const Ventas = require('../models/ventas');
 const Venta_Temporal = require('../models/venta_temporal');
 const Productos = require('../models/productos');
+
+const getVentaById = async(req, res = response) => {
+
+    const id  = req.params.id;
+    
+  
+        const VentaById = await Ventas.findById( id ).populate({path:'detalle_venta.vt_id_prod',select:'nom_prod', model:'Productos'});
+
+        if ( !VentaById ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Venta no encontrado por id',
+            });
+        }
+
+    res.json({
+        ok: true,
+        VentaById
+    });
+
+}
 
 const getVentas = async(req, res = response) => {
 
@@ -145,6 +164,7 @@ const borrarVenta = async (req, res = response) => {
 
 
 module.exports = {
+    getVentaById,
     getVentas,
     crearVenta,
     actualizarVenta,

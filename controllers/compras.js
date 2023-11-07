@@ -8,6 +8,7 @@ const getCompras = async(req, res) => {
 
     const [ compras, total ] = await Promise.all([Compras.find({estado:true}, 
                 'numero_comp ruc_comp tipo_doc_comp prove_comp fecha_comp subtot_comp igv_comp tot_comp detalle_comp percepcion')
+                //.populate('Detalle_Producto','detalle_comp')
                 .skip( desde ),
        Compras.countDocuments()
     ]);

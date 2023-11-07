@@ -20,7 +20,10 @@ const ReservaSchema = Schema({
     },
     color: {
         primary: { type: String, required: true }
-      }
+      },
+    descripcion: {
+        type: String
+    }  
 }, 
 
 {  collection: 'Reserva' });

@@ -7,7 +7,7 @@ const getReservas = async(req, res) => {
     const desde = Number(req.query.desde) || 0;
 
     const [ reserva, total ] = await Promise.all([Reserva.find({},
-             'persona title start end color')
+             'persona title start end color descripcion')
             .skip( desde ),
             Reserva.countDocuments()
     ]);
